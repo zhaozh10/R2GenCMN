@@ -15,9 +15,9 @@ def parse_agrs():
     parser = argparse.ArgumentParser()
 
     # Data input settings
-    parser.add_argument('--image_dir', type=str, default='data/iu_xray/images/',
+    parser.add_argument('--image_dir', type=str, default='../data/iu_xray/images/',
                         help='the path to the directory containing the data.')
-    parser.add_argument('--ann_path', type=str, default='data/iu_xray/annotation.json',
+    parser.add_argument('--ann_path', type=str, default='../data/iu_xray/annotation.json',
                         help='the path to the directory containing the data.')
 
     # Data loader settings
@@ -26,7 +26,7 @@ def parse_agrs():
     parser.add_argument('--max_seq_length', type=int, default=60, help='the maximum sequence length of the reports.')
     parser.add_argument('--threshold', type=int, default=3, help='the cut off frequency for the words.')
     parser.add_argument('--num_workers', type=int, default=2, help='the number of workers for dataloader.')
-    parser.add_argument('--batch_size', type=int, default=16, help='the number of samples for a batch')
+    parser.add_argument('--batch_size', type=int, default=1, help='the number of samples for a batch')
 
     # Model settings (for visual extractor)
     parser.add_argument('--visual_extractor', type=str, default='resnet101', help='the visual extractor to be used.')
@@ -64,7 +64,7 @@ def parse_agrs():
     # Trainer settings
     parser.add_argument('--n_gpu', type=int, default=1, help='the number of gpus to be used.')
     parser.add_argument('--epochs', type=int, default=100, help='the number of training epochs.')
-    parser.add_argument('--save_dir', type=str, default='results/iu_xray', help='the patch to save the models.')
+    parser.add_argument('--save_dir', type=str, default='./results/iu_xray', help='the patch to save the models.')
     parser.add_argument('--record_dir', type=str, default='records/', help='the patch to save the results of experiments.')
     parser.add_argument('--log_period', type=int, default=1000, help='the logging interval (in batches).')
     parser.add_argument('--save_period', type=int, default=1, help='the saving period (in epochs).')
@@ -91,7 +91,7 @@ def parse_agrs():
     # Others
     parser.add_argument('--seed', type=int, default=9233, help='.')
     parser.add_argument('--resume', type=str, help='whether to resume the training from existing checkpoints.')
-    parser.add_argument('--load', type=str, help='whether to load the pre-trained model.')
+    parser.add_argument('--load', type=str, default='../Pretrain/r2gcmn_iu_xray.pth',help='whether to load the pre-trained model.')
 
     args = parser.parse_args()
     return args

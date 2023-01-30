@@ -8,6 +8,7 @@ simcse/__pycache__/
 *.so
 
 # Distribution / packaging
+*.json
 .Python
 build/
 develop-eggs/

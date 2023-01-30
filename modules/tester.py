@@ -1,10 +1,11 @@
 import logging
 import os
 from abc import abstractmethod
-
+import json
 import cv2
 import numpy as np
 import spacy
+from tqdm import tqdm
 import scispacy
 import torch
 
@@ -69,17 +70,19 @@ class Tester(BaseTester):
         self.test_dataloader = test_dataloader
 
     def test(self):
+        resList=[]
         self.logger.info('Start to evaluate in the test set.')
         self.model.eval()
         log = dict()
         with torch.no_grad():
             test_gts, test_res = [], []
-            for batch_idx, (images_id, images, reports_ids, reports_masks) in enumerate(self.test_dataloader):
+            for batch_idx, (images_id, images, reports_ids, reports_masks) in enumerate(tqdm(self.test_dataloader)):
                 images, reports_ids, reports_masks = images.to(self.device), reports_ids.to(
                     self.device), reports_masks.to(self.device)
                 output, _ = self.model(images, mode='sample')
                 reports = self.model.tokenizer.decode_batch(output.cpu().numpy())
                 ground_truths = self.model.tokenizer.decode_batch(reports_ids[:, 1:].cpu().numpy())
+                resList.append({"case":images_id,"pseudo":reports,"gt":ground_truths})
                 test_res.extend(reports)
                 test_gts.extend(ground_truths)
 
@@ -87,6 +90,8 @@ class Tester(BaseTester):
                                         {i: [re] for i, re in enumerate(test_res)})
             log.update(**{'test_' + k: v for k, v in test_met.items()})
             print(log)
+        with open(f'{self.args.save_dir}.json', 'w') as json_file:
+            json.dump(resList, json_file,indent = 4, sort_keys=True)
         return log
 
     def plot(self):
