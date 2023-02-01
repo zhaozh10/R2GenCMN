@@ -74,6 +74,7 @@ class Tester(BaseTester):
         self.logger.info('Start to evaluate in the test set.')
         self.model.eval()
         log = dict()
+        print(f'res will be saved at {self.args.save_dir}.json')
         with torch.no_grad():
             test_gts, test_res = [], []
             for batch_idx, (images_id, images, reports_ids, reports_masks) in enumerate(tqdm(self.test_dataloader)):
